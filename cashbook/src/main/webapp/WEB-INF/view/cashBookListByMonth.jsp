@@ -17,6 +17,7 @@
 	int endBlank =(int)request.getAttribute("endBlank");//뒤쪽 빈칸 수
 	int endDay = (int)request.getAttribute("endDay");//출력월의 마지막 일
 	int totalTd = (int)request.getAttribute("totalTd");//전체 td수
+	int today = (int)request.getAttribute("today");//오늘 날짜
 	//디버깅
 	System.out.println(cashBookList.size() +"<-list.size() CashBookListByMonth.jsp");
 	System.out.println(year +"<--year CashBookListByMonth.jsp");
@@ -27,8 +28,13 @@
 	System.out.println(totalTd +"<--totalTd CashBookListByMonth.jsp");
 %>
 	<h2><%=year%>년 <%=month %>월</h2>
-	<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month-1%>">이전달</a>
-	<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month+1%>">다음달</a>
+	<div>
+		<!-- 페이징부분 -->
+		<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month-1%>">이전달</a>
+		<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month+1%>">다음달</a>
+		<!-- 태그 부분  -->
+		<a href = "<%=request.getContextPath()%>/TagListController?todayDate=<%=year%>-<%=String.format("%02d",month)%>-<%=String.format("%02d",today)%>">TagList</a>
+	</div>
 	<table class="table table-bordered">
 		<thead>
 			<tr>

@@ -36,9 +36,9 @@ public class CashBookListByMonthController extends HttpServlet {
 			}
 			System.out.println(year +"<-year CashBookListByMonthController");
 			System.out.println(month +"<-month CashBookListByMonthController");
-//			// 오늘 날짜
-//			int today = now.get(Calendar.DATE);
-//			System.out.println(today+"<-today CashBookListByMonthController");
+			// 오늘 날짜
+			int today = now.get(Calendar.DATE);
+			System.out.println(today+"<-today CashBookListByMonthController");
 
 		//아래의 코드는 모델로 가는게 좋을수도있다.
 		//캘린더api 모델을 불러온 컨트롤러로 볼수있다
@@ -76,7 +76,7 @@ public class CashBookListByMonthController extends HttpServlet {
 		request.setAttribute("endBlank", endBlank);//뒤쪽 빈칸 수
 		request.setAttribute("endDay", endDay);//출력월의 마지막 일
 		request.setAttribute("totalTd", totalTd);//전체 td수
-		//request.setAttribute("today", today);//오늘날짜
+		request.setAttribute("today", today);//오늘날짜
 		//3)뷰 포워딩
 		request.getRequestDispatcher("/WEB-INF/view/cashBookListByMonth.jsp").forward(request, response);
 	}

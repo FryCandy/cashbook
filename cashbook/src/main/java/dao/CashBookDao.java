@@ -12,6 +12,7 @@ import java.util.Map;
 
 import vo.CashBook;
 public class CashBookDao {
+	//달별 cashbookList select 메서드
 	public List<Map<String,Object>> selectcashBookListbyMonth(int year, int month) {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		//DB 자원 준비
@@ -57,6 +58,57 @@ public class CashBookDao {
 				conn.close();
 			}catch(SQLException e) {
 			e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	//태그에 따른 cashbookList select 메서드
+	public List<Map<String,Object>> selectcashBookListbyTag(String tag) {
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		//DB 자원 준비
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		//쿼리 작성
+		String sql = "SELECT c.cashbook_no cashbookNo "
+				+ "		,t.tag tag "
+				+ "		,c.cash_date cashDate "
+				+ "		,c.kind kind "
+				+ "		,c.cash cash "
+				+ "		,LEFT(c.memo,5) memo "
+				+ "FROM cashbook c INNER JOIN hashtag t "
+				+ "ON c.cashbook_no = t.cashbook_no "
+				+ "WHERE tag = ? "
+				+ "ORDER BY c.cash_date DESC";
+		//DB에 값 요청
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, tag);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Map<String,Object> map = new HashMap <String,Object>();
+				map.put("cashBookNo",rs.getInt("cashBookNo"));
+				map.put("tag",rs.getString("tag"));
+				map.put("cashDate",rs.getString("cashDate"));
+				map.put("kind",rs.getString("kind"));
+				map.put("cash",rs.getInt("cash"));
+				map.put("memo",rs.getString("memo"));
+				list.add(map);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				//DB자원 반납
+				rs.close();
+				stmt.close();
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		return list;
