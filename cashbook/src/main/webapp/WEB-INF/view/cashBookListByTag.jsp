@@ -5,13 +5,14 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-	<title>CashBookListByMonth</title>
+	<title>CashBookListByTag</title>
 </head>
 <body class = "container">
 <%
 	//컨트롤러 값 받기
 	List<Map<String,Object>> cashBookList = (List<Map<String,Object>>)request.getAttribute("list");
 %>
+	<h1><%=cashBookList.get(1).get("tag") %>태그 List</h1>
 	<table class="table table-bordered table-hover">
 		<thead>
 			<tr>

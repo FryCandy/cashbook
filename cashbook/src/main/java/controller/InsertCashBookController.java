@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
 import vo.CashBook;
@@ -17,6 +18,14 @@ import vo.CashBook;
 public class InsertCashBookController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//session 값 요청
+		HttpSession session = request.getSession();
+	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    //로그인이 안되어있을 경우 LoginController로 보냄
+	    if(sessionMemberId == null) {
+	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        return;
+	      }
 		//request 분석
 		String year = request.getParameter("year");
 		String month = request.getParameter("month");
@@ -28,6 +37,14 @@ public class InsertCashBookController extends HttpServlet {
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//session 값 요청
+		HttpSession session = request.getSession();
+	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    //로그인이 안되어있을 경우 LoginController로 보냄
+	    if(sessionMemberId == null) {
+	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        return;
+	      }
 
 		//request 분석
 		request.setCharacterEncoding("UTF-8"); // 폼값(post)에 한글이 있는데 한글이 utf-8방식으로 인코딩 되었다.
