@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +6,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 	<title>InsertCashBook</title>
 </head>
-<body = class ="container">
+<body class ="container">
 	<h1>insertCashBook</h1>
 	<form method ="post" action="<%=request.getContextPath()%>/InsertCashBookController">
 		<!-- 연도와 달력값 보내기 -->

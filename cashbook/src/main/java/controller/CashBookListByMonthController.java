@@ -22,6 +22,7 @@ public class CashBookListByMonthController extends HttpServlet {
 	    //로그인이 안되어있을 경우 LoginController로 보냄
 	    if(sessionMemberId == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        System.out.println("noLogin");//디버깅
 	        return;
 	      }
 		//1) 월별 가계부 리스트 요청 처리 분석

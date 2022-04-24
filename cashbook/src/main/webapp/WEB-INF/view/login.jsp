@@ -7,7 +7,18 @@
 	<title>login.jsp</title>
 </head>
 <body class = "container">
+<%
+	//오류메서지 받을 변수
+	String msg = "";
+	//오류값 받기
+		if(request.getParameter("msg")!=null){
+		if(request.getParameter("msg").equals("failLogin")){
+			msg ="아이디 혹은 비밀번호가 맞지 않습니다.";
+		}
+	}
+%>
 	<h1>Login Form</h1>
+	<h2><%=msg%></h2>
 	<form action="<%=request.getContextPath()%>/LoginController" method ="post">
 	<table class="table table-bordered">
 		<tr>
@@ -21,6 +32,7 @@
 		<tr>
 			<td colspan = "2">
 				<button type = "submit" class="btn btn-success">로그인</button>
+				<a  href="<%=request.getContextPath()%>/InsertMemberController" type ="button" class="btn btn-info">회원가입</a>
 			</td>
 		</tr>
 	</table>

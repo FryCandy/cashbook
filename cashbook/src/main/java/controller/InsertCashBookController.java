@@ -31,9 +31,9 @@ public class InsertCashBookController extends HttpServlet {
 		String month = request.getParameter("month");
 		String day = request.getParameter("day");
 		String cashDate = year+"-"+month+"-"+day;
-		System.out.println(cashDate +"<-cashDate insertCashBookController"); //디버깅
+		System.out.println(cashDate +"<-cashDate InsertCashBookController"); //디버깅
 		request.setAttribute("cashDate", cashDate);
-		request.getRequestDispatcher("/WEB-INF/view/InsertCashBookForm.jsp").forward(request, response);// get 방식은 InsertCashBook.jsp페이지를 서비스 =C-V방식
+		request.getRequestDispatcher("/WEB-INF/view/insertCashBookForm.jsp").forward(request, response);// get 방식은 InsertCashBook.jsp페이지를 서비스 =C-V방식
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

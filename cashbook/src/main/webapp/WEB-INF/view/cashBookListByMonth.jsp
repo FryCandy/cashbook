@@ -28,16 +28,18 @@
 	System.out.println(totalTd +"<--totalTd CashBookListByMonth.jsp");
 %>
 	<h2><%=year%>년 <%=month %>월</h2>
-	<h5>
-		<%=request.getAttribute("sessionMemberId") %>님 반갑습니다.
-		<a href="<%=request.getContextPath()%>/LogoutController" type="button" class="btn btn-primary" >로그아웃</a>
-	</h5>		
+	<!-- 회원 정보 -->
+	<!-- request.getC..(컨텍스명,프로젝트명)을 안써도 된다. include는 내부 요청이기 때문이다. -->
+	<jsp:include page="/WEB-INF/inc/memberMenu.jsp"></jsp:include>
+	<!-- 회원정보 끝 -->	
 	<div>
-		<!-- 페이징부분 -->
-		<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month-1%>">이전달</a>
-		<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month+1%>">다음달</a>
-		<!-- 태그 부분  -->
-		<a href = "<%=request.getContextPath()%>/TagListController?todayDate=<%=year%>-<%=String.format("%02d",month)%>-<%=String.format("%02d",today)%>">TagList</a>
+		<p class="text-right">
+			<!-- 페이징부분 -->
+			<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month-1%>">이전달</a>
+			<a href = "<%=request.getContextPath()%>/CashBookListByMonthController?year=<%=year%>&month=<%=month+1%>">다음달</a>
+			<!-- 태그 부분  -->
+			<a href = "<%=request.getContextPath()%>/TagListController?todayDate=<%=year%>-<%=String.format("%02d",month)%>-<%=String.format("%02d",today)%>" type = "button" class="btn btn-outline-success">TagList</a>
+		</p>
 	</div>
 	<table class="table table-bordered">
 		<thead>

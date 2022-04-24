@@ -13,6 +13,7 @@ public class LogoutController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//로그아웃의 경우 현재의 세션값을 지워버리고 새로운 세션값을 갱신시키는 방법 사용
 		request.getSession().invalidate();//session 갱신 메서드
+		response.sendRedirect(request.getContextPath()+"/LoginController");//LoginController로 돌려보냄
 	}
 
 

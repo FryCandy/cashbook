@@ -27,7 +27,12 @@ public class LoginController extends HttpServlet {
 	}
 	//로그인 액션
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	//로그인 되어 있는 멤버면 리다이랙트
+		//로그인 되어 있는 멤버면 CashBookByMonthController로 리다이렉트
+		HttpSession session = request.getSession();//현재 연결한 클라이언트(브라우저)에 대한 세션 값을 받아옴
+		if(session.getAttribute("sessionMemberId") != null) {
+			response.sendRedirect(request.getContextPath()+"/CashBookByMonthController");
+			return;
+		}
 	//널체크
 	//요청값 처리
 	String memberId = request.getParameter("memberId");
@@ -47,8 +52,7 @@ public class LoginController extends HttpServlet {
 		return;
 	}
 	//로그인 성공
-	HttpSession session = request.getSession(); //현재 연결한 클라이언트(브라우저)에 대한 세션 값을 받아옴
-	session.setAttribute("sessionMemberId", returnMemberId);
+	session.setAttribute("sessionMemberId", returnMemberId);//세션에 sessionMemberId 저장
 	response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
 	}
 

@@ -21,6 +21,7 @@ public class TagListController extends HttpServlet {
 	    //로그인이 안되어있을 경우 LoginController로 보냄
 	    if(sessionMemberId == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        System.out.println("noLogin");
 	        return;
 	      }
 		//널체크
