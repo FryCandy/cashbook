@@ -81,6 +81,7 @@ public class InsertCashBookController extends HttpServlet {
 		cashBook.setKind(kind);
 		cashBook.setCash(cash);
 		cashBook.setMemo(memo);
+		cashBook.setMemeberId(sessionMemberId);
 		
 		//Dao에 모델 값 요청
 		CashBookDao cashBookDao = new CashBookDao();

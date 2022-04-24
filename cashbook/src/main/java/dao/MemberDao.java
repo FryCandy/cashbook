@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import vo.Member;
 public class MemberDao {
@@ -182,22 +184,47 @@ public class MemberDao {
 		//DB 자원 준비
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		//이슈 : hashtag는 cashbook에 외래키 cashbook은 meber에 외래키
+		//삭제 순서 : hashtag -> cashbook -> member
 		//쿼리 작성
-		//1.cashbook 테이블 데이터 삭제
+		//0. select cashbook_no
+		String selectCashBookNoSql = "SELECT cashbook_no cashbookNo FROM cashbook WHERE member_id=?";
+		//1. hashtag 테이블 데이터 삭제
+		String deletehashtagSql = "DELETE FROM hashtag WHERE cashbook_no=?"; 
+		//2.cashbook 테이블 데이터 삭제
 		String deleteCashbookSql = "DELETE FROM cashbook WHERE member_id=?"; 
-		//2.member 테이블 데이터 삭제
+		//3.member 테이블 데이터 삭제
 		String deleteMemberSql = "DELETE FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
 			conn.setAutoCommit(false); // 자동 커밋 해제
-			//1.cashbook 테이블 데이터 삭제
+			//0. select cashbook_no
+			stmt = conn.prepareStatement(selectCashBookNoSql);
+			stmt.setString(1, member.getMemberId());
+			rs = stmt.executeQuery();
+			List<Integer> list = new ArrayList<>(); //cashBookNo을 담을 리스트 
+			while(rs.next()) {//memberId에 따른 모든 cashbookNo 정보 저장
+				list.add(rs.getInt("cashbookNo"));
+				
+			}
+			//1. hashtag 테이블 데이터 삭제
+			stmt.close(); // stmt를 반납후 재사용
+			stmt = conn.prepareStatement(deletehashtagSql);
+			for(Integer i : list) {
+				stmt.setInt(1, i);
+				stmt.executeUpdate();
+			}
+			//stmt 해제 후 다음 쿼리 요청
+			stmt.close();
+			//2.cashbook 테이블 데이터 삭제
 			stmt = conn.prepareStatement(deleteCashbookSql);
 			stmt.setString(1, member.getMemberId());
 			stmt.executeUpdate();
 			//stmt 해제 후 다음 쿼리 요청
 			stmt.close();
-			//2. member 테이블 데이터 삭제
+			//3. member 테이블 데이터 삭제
 			stmt = conn.prepareStatement(deleteMemberSql);
 			stmt.setString(1, member.getMemberId());
 			stmt.setString(2, member.getMemberPw());

@@ -8,11 +8,24 @@ public class CashBook {
     private String memo;
     private String updateDate;
     private String createDate;
+    private String memeberId;
+
+    
 	@Override
 	public String toString() {
 		return "CashBook [cashBookNo=" + cashBookNo + ", cashDate=" + cashDate + ", kind=" + kind + ", cash=" + cash
-				+ ", memo=" + memo + ", updateDate=" + updateDate + ", createDate=" + createDate + "]";
+				+ ", memo=" + memo + ", updateDate=" + updateDate + ", createDate=" + createDate + ", memeberId="
+				+ memeberId + "]";
 	}
+	
+	public String getMemeberId() {
+		return memeberId;
+	}
+
+	public void setMemeberId(String memeberId) {
+		this.memeberId = memeberId;
+	}
+
 	public int getCashBookNo() {
 		return cashBookNo;
 	}

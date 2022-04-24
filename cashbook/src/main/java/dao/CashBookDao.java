@@ -132,15 +132,17 @@ public class CashBookDao {
 					+ "													, kind"
 					+ "													, cash"
 					+ "													, memo"
+					+ "													,member_id "
 					+ "													, update_date"
 					+ "													, create_date)"
-					+ "										 VALUES (?, ?, ?,?, NOW(), NOW())";
+					+ "										 VALUES (?, ?, ?,?,?, NOW(), NOW())";
 			//PreparedStatement.RETURN_GENERATED_KEYS는  insert+select 방금생성된 행의 키 값 ex) 방금 입력한 cashBook_no를 select
 			stmt = conn.prepareStatement(insertCashBookSql,PreparedStatement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, cashBook.getCashDate());
 			stmt.setString(2, cashBook.getKind());
 			stmt.setInt(3, cashBook.getCash());
 			stmt.setString(4, cashBook.getMemo());
+			stmt.setString(5,cashBook.getMemeberId());
 			stmt.executeUpdate();//insert와 select 실행
 			rs = stmt.getGeneratedKeys(); //Key를 가져와서 rs에 서장
 			int cashBookNo = 0; //방금 생성된 cashBookNo을 넣을 변수
@@ -151,7 +153,7 @@ public class CashBookDao {
 			PreparedStatement stmt2 = null;
 			//insertHashtag 쿼리
 			for(String h : hashtag) {// hashtag만큼 반복해서 insert
-				String insertHashtagSql = "INSERT INTO hashtag(cashBook_no,tag,create_date) VALUES (?,?,NOW())";
+				String insertHashtagSql = "INSERT INTO hashtag(cashBook_no,tag) VALUES (?,?)";
 				stmt2= conn.prepareStatement(insertHashtagSql);
 				stmt2.setInt(1, cashBookNo);
 				stmt2.setString(2, h);

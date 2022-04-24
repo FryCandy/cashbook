@@ -3,6 +3,8 @@ package vo;
 public class Hashtag {
 	private int cashBookNo;
 	private String tag;
+	
+	
 	public int getCashBookNo() {
 		return cashBookNo;
 	}
