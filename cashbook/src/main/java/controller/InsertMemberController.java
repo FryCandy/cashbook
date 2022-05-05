@@ -15,10 +15,10 @@ import vo.Member;
 @WebServlet("/InsertMemberController")
 public class InsertMemberController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//로그인 되어 있는 멤버면 CashBookByMonthController로 리다이렉트
+		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();
-		if(session.getAttribute("sessionMemberId") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookByMonthController");
+		if(session.getAttribute("sessionLoginMember") != null) {
+			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
 			return;
 		}
 		//insertMemberForm.jsp 호출
@@ -28,10 +28,10 @@ public class InsertMemberController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//인코딩
 		request.setCharacterEncoding("UTF-8");
-		//로그인 되어 있는 멤버면 CashBookByMonthController로 리다이렉트
+		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();
-		if(session.getAttribute("sessionMemberId") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookByMonthController");
+		if(session.getAttribute("sessionLoginMember") != null) {
+			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
 			return;
 		}
 	    //널 체크

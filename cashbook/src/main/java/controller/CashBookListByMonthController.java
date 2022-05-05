@@ -13,14 +13,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
+import dao.StatsDao;
+import vo.Member;
+import vo.Stats;
 @WebServlet("/CashBookListByMonthController")
 public class CashBookListByMonthController extends HttpServlet {
+	private StatsDao statsDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.statsDao = new StatsDao();
+		//날짜별 전체 접속자 수
+		Stats stats = statsDao.selectStatsOneByNow();
+		int totalCount = statsDao.selectStatsTotalCount();
+		request.setAttribute("stats", stats);
+		request.setAttribute("totalCount", totalCount);
+		
+		
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");//디버깅
 	        return;
@@ -67,7 +79,7 @@ public class CashBookListByMonthController extends HttpServlet {
 		int endBlank = 0;
 			if((startBlank+endDay)%7 !=0) { //7로 나누어 떨어지면 뒤에빈칸 없음 -> 0으로 유지
 				endBlank = 7-((startBlank+endDay)%7);
-			}
+			} 
 			System.out.println(endBlank+"<-endBlank CashBookListByMonthController");//디버깅
 		//총 행의 수
 		int totalTd = startBlank + endBlank + endDay;
@@ -75,7 +87,7 @@ public class CashBookListByMonthController extends HttpServlet {
 		
 		//2)모델값(월별 가계부 리스트)을 반환하는 비지니스 로직(모델) 호출
 		CashBookDao cashBookDao = new CashBookDao();
-		List<Map<String,Object>> cashBookList = cashBookDao.selectcashBookListbyMonth(year, month);
+		List<Map<String,Object>> cashBookList = cashBookDao.selectcashBookListbyMonth(year, month,sessionLoginMember.getMemberId());
 		/*
 		 달력출력에 필요한 모델값(데이터베이스에서 반환된 모델 값)
 		 */

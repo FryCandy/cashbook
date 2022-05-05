@@ -13,7 +13,7 @@ import java.util.Map;
 import vo.CashBook;
 public class CashBookDao {
 	//달별 cashbookList select 메서드
-	public List<Map<String,Object>> selectcashBookListbyMonth(int year, int month) {
+	public List<Map<String,Object>> selectcashBookListbyMonth(int year, int month,String sessionMemberId) {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		//DB 자원 준비
 		Connection conn = null;
@@ -29,6 +29,7 @@ public class CashBookDao {
 				+ "			,LEFT(memo,5) memo "
 				+ "		FROM cashbook"
 				+ "		WHERE YEAR(cash_date) = ? AND MONTH(cash_date)=?"
+				+ "		AND member_id=?"
 				+ "		ORDER BY DAY(cash_date) ASC, kind ASC";
 		//DB에 값 요청
 		try {
@@ -37,6 +38,7 @@ public class CashBookDao {
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, year);
 			stmt.setInt(2, month);
+			stmt.setString(3, sessionMemberId);
 			rs = stmt.executeQuery();
 			while(rs.next()) {
 				Map<String,Object> map = new HashMap <String,Object>();

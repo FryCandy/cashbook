@@ -16,9 +16,9 @@ public class UpdateMemberController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");//디버깅
 	        return;
@@ -27,7 +27,7 @@ public class UpdateMemberController extends HttpServlet {
 	    MemberDao memberDao = new MemberDao();
 	    //id정보로 DB의 상세보기 값 호출
 	    Member member = new Member();
-	    member  = memberDao.selectMemberOne(sessionMemberId);
+	    member  = memberDao.selectMemberOne(sessionLoginMember.getMemberId());
 	    request.setAttribute("member", member);
 	    request.getRequestDispatcher("/WEB-INF/view/updateMemberForm.jsp").forward(request, response);
 	}	
@@ -37,9 +37,9 @@ public class UpdateMemberController extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");//디버깅
 	        return;

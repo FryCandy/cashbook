@@ -11,14 +11,15 @@ import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
 import vo.CashBook;
+import vo.Member;
 @WebServlet("/CashBookOneController")
 public class CashBookOneController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        return;
 	      }

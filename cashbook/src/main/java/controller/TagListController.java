@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.HashtagDao;
+import vo.Member;
 @WebServlet("/TagListController")
 public class TagListController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");
 	        return;
@@ -49,9 +50,9 @@ public class TagListController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        return;
 	      }

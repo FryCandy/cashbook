@@ -23,7 +23,8 @@ public class MemberDao {
 				+ "					,name"
 				+ "					,gender"
 				+ "					,age"
-				+ "					,create_date createDate "
+				+ "					,create_date createDate"
+				+ "					,update_date updateDate "
 				+ "		 FROM member "
 				+ "		WHERE member_id=? ";
 		//DB에 값 요청
@@ -39,6 +40,7 @@ public class MemberDao {
 				m.setGender(rs.getString("gender"));
 				m.setAge(rs.getInt("age"));
 				m.setCreateDate(rs.getString("createDate"));
+				m.setUpdateDate(rs.getString("updateDate"));
 			}
 					
 				} catch (Exception e) {
@@ -57,8 +59,8 @@ public class MemberDao {
 	}
 	
 	//로그인
-	public String selectMemberByIdPw(Member member) {
-		String memberId =null; //로그인 실패시 null이 리턴
+	public Member selectMemberByIdPw(Member member) {
+		Member m = new Member(); //로그인 실패시 null이 리턴
 		//DB 자원 준비
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -75,9 +77,10 @@ public class MemberDao {
 			stmt.setString(1, member.getMemberId());
 			stmt.setString(2, member.getMemberPw());
 			rs =stmt.executeQuery();
-			if(rs.next()) {
-				memberId=rs.getString("member_id");
-					}
+			if(rs.next()) {//로그인 성공시 id와 level을 DB에서 가져와서 Member에 저장
+				m.setMemberId(rs.getString("member_id"));
+				m.setLevel(rs.getInt("level"));
+			}
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -92,7 +95,7 @@ public class MemberDao {
 					}
 				}
 		
-		return memberId;
+		return m;
 	}
 	//Member 테이블 입력
 	public int insertMember(Member member) {
@@ -107,8 +110,10 @@ public class MemberDao {
 				+ " 								,name "
 				+ "									, gender "
 				+ "									,age "
-				+ "									,create_date) "
-				+ "			VALUES (?,PASSWORD(?),?,?,?,NOW()) ";
+				+ "									,level"
+				+ "									,create_date"
+				+ "									,update_date) "
+				+ "			VALUES (?,PASSWORD(?),?,?,?,1,NOW(),NOW()) ";
 		//DB에 값 요청
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
@@ -150,6 +155,7 @@ public class MemberDao {
 				+ "									, gender=? "
 				+ "									,age=? "
 				+ "									,member_pw = PASSWORD(?) "
+				+ "									,update_date = NOW() "
 				+ "			WHERE member_id = ? "
 				+ "			AND member_pw =PASSWORD(?)";
 		//DB에 값 요청

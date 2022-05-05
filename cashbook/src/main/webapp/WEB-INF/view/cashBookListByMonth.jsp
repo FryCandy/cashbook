@@ -31,7 +31,11 @@
 	<!-- 회원 정보 -->
 	<!-- request.getC..(컨텍스명,프로젝트명)을 안써도 된다. include는 내부 요청이기 때문이다. -->
 	<jsp:include page="/WEB-INF/inc/memberMenu.jsp"></jsp:include>
-	<!-- 회원정보 끝 -->	
+	<!-- 회원정보 끝 -->
+	<!-- 관리자 페이지로 가기 버튼 -->
+	<div>
+			<a href = "<%=request.getContextPath()%>/host/HostPageController">관리자페이지로 이동</a>
+	</div>	
 	<div>
 		<p class="text-right">
 			<!-- 페이징부분 -->

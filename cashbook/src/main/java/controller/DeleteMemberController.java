@@ -17,23 +17,23 @@ public class DeleteMemberController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");//디버깅
 	        return;
 	      }
 	    //id정보로 회원탈퇴 폼 호출
-	    request.setAttribute("memberId", sessionMemberId);
+	    request.setAttribute("memberId", sessionLoginMember);
 	    request.getRequestDispatcher("/WEB-INF/view/deleteMemberForm.jsp").forward(request, response);
 			}	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("noLogin");//디버깅
 	        return;

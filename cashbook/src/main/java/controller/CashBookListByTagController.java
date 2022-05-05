@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
+import vo.Member;
 @WebServlet("/CashBookListByTagController")
 public class CashBookListByTagController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,9 +20,9 @@ public class CashBookListByTagController extends HttpServlet {
 	request.setCharacterEncoding("UTF-8");
 	//session 값 요청
 	HttpSession session = request.getSession();
-    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
     //로그인이 안되어있을 경우 LoginController로 보냄
-    if(sessionMemberId == null) {
+    if(sessionLoginMember == null) {
         response.sendRedirect(request.getContextPath()+"/LoginController");
         return;
       }

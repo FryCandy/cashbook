@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
 import vo.CashBook;
+import vo.Member;
 
 @WebServlet("/InsertCashBookController")
 public class InsertCashBookController extends HttpServlet {
@@ -20,9 +21,9 @@ public class InsertCashBookController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        return;
 	      }
@@ -39,9 +40,9 @@ public class InsertCashBookController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        return;
 	      }
@@ -81,7 +82,7 @@ public class InsertCashBookController extends HttpServlet {
 		cashBook.setKind(kind);
 		cashBook.setCash(cash);
 		cashBook.setMemo(memo);
-		cashBook.setMemeberId(sessionMemberId);
+		cashBook.setMemeberId(sessionLoginMember.getMemberId());
 		
 		//Dao에 모델 값 요청
 		CashBookDao cashBookDao = new CashBookDao();

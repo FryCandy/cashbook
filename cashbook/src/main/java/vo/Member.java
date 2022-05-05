@@ -7,7 +7,31 @@ public class Member {
 	private String name;
 	private String gender;
 	private int age;
+	private int level;
 	private String createDate;
+	private String updateDate;
+	//constructor
+	public Member() {}
+	public Member(String memberId, String memberPw, String name, String gender, int age, int level, String createDate,
+			String updateDate) {
+		super();
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.name = name;
+		this.gender = gender;
+		this.age = age;
+		this.level = level;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+	}
+	//tostring
+	@Override
+	public String toString() {
+		return "Member [memberId=" + memberId + ", memberPw=" + memberPw + ", name=" + name + ", gender=" + gender
+				+ ", age=" + age + ", level=" + level + ", createDate=" + createDate + ", updateDate=" + updateDate
+				+ "]";
+	}
+	//gettersetter
 	public String getMemberId() {
 		return memberId;
 	}
@@ -38,19 +62,26 @@ public class Member {
 	public void setAge(int age) {
 		this.age = age;
 	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	public String getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	@Override
-	public String toString() {
-		return "Member [memberId=" + memberId + ", memberPw=" + memberPw + ", name=" + name + ", gender=" + gender
-				+ ", age=" + age + ", createDate=" + createDate + "]";
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	
-	
+
 	
 	
 }

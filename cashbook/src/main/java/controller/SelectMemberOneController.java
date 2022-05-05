@@ -16,16 +16,16 @@ public class SelectMemberOneController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
 		HttpSession session = request.getSession();
-	    String sessionMemberId = (String)session.getAttribute("sessionMemberId");
+	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionMemberId == null) {
+	    if(sessionLoginMember == null) {
 	        response.sendRedirect(request.getContextPath()+"/LoginController");
 	        System.out.println("notLogin");
 	        return;
 	    }
 	    //모델 호출
 	    MemberDao memberDao = new MemberDao();
-	    Member meber = memberDao.selectMemberOne(sessionMemberId);
+	    Member meber = memberDao.selectMemberOne(sessionLoginMember.getMemberId());
 	    request.setAttribute("member", meber);
 	    request.getRequestDispatcher("/WEB-INF/view/memberOne.jsp").forward(request, response);
 	}
