@@ -62,7 +62,7 @@ public class LoginController extends HttpServlet {
 		session.setAttribute("sessionLoginMember",loginMember);
 		
 		//현재 로그인 member 보기 기능
-		if((List<Map<String,Object>>)request.getServletContext().getAttribute("loginList")==null) { //loginList의 값이 null이라면
+		if((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))==null||((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))).size()==0) { //loginList의 값이 null이라면
 			List<Map<String,Object>> list = new ArrayList<>(); //리스트에 아이디와, session 저장
 			Map<String,Object> map = new HashMap<>();
 			map.put("sessionId", loginMember.getMemberId());
@@ -80,13 +80,13 @@ public class LoginController extends HttpServlet {
 							map.put("sessionId", m.get("sessionId"));
 							map.put("session",m.get("session"));
 							overlapList.add(map); //overlapList에 기존의 session과 Id를저장
-						request.getServletContext().setAttribute("overlap", overlapList); //overlapList는 application 공간에 저장
+						request.getServletContext().setAttribute("overlapList", overlapList); //overlapList는 application 공간에 저장
 					} else {
 					//application내에 이미 overlapList가 있다면
 					List<Map<String,Object>> overlapList = (List<Map<String,Object>>)request.getServletContext().getAttribute("overlapList"); //기존의 overlapList를 가져와서
 						Map<String,Object> map = new HashMap<>();
-						map.put("sessionId", loginMember.getMemberId());
-						map.put("session",session);
+						map.put("sessionId", m.get("sessionId"));
+						map.put("session",m.get("session"));
 						overlapList.add(map); //overlapList에 sessionId와 session을 추가 한후
 					request.getServletContext().setAttribute("overlapList", overlapList);//overlapList을 다시 application 공간에 저장
 					}

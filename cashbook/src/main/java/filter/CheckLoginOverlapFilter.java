@@ -1,6 +1,8 @@
 package filter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,21 +28,24 @@ public class CheckLoginOverlapFilter implements Filter {
 		HttpServletRequest req=(HttpServletRequest)request;
 		HttpServletResponse res=(HttpServletResponse)response;
 		HttpSession session = req.getSession();
-		System.out.println(session+"////1234");
-		System.out.println(request.getServletContext().getAttribute(session.getAttribute("sessionMemberId")+"overlap")+"///3456");
-		if(session.equals(request.getServletContext().getAttribute(session.getAttribute("sessionMemberId")+"overlap"))) {//만일 session이 (sessionMemberIdoverlap) 값과 같다면
-			request.getServletContext().setAttribute(session.getAttribute("sessionMemberId")+"overlap","logout"); // (sessionMemberIdoverlap)에 임의의 값 logout을 넣고(다시 필터되는것방지)
-			res.sendRedirect(req.getContextPath()+"/LogoutController");//로그아웃컨트롤러로 보내서 로그아웃
-			return;
+		System.out.println(session+"<-session CheckLoginOverlapFilter");
+		String session1 = (String.valueOf(session)); //버그방지 형변환
+		//overlapList에 있는 회원을 강제 로그아웃 시키는 기능
+		if(request.getServletContext().getAttribute("overlapList")!=null){//overlapList가 null이 아니라면
+			for(Map<String,Object> m : (List<Map<String,Object>>)request.getServletContext().getAttribute("overlapList")) {
+				System.out.println(m.get("session")+"<-m.get(\"session\") CheckLoginOverlapFilter"); //디버깅
+				System.out.println((String.valueOf(m.get("session")).equals(session1))); //디버깅
+				if((String.valueOf(m.get("session")).equals(session1))) {//현재 요청한 session이 overlapList에 있는 session이라면
+					m.put("session" ,"logout"); // 무한루프를 피하기위해 session 초기화
+					res.sendRedirect(req.getContextPath()+"/LogoutController");//로그아웃컨트롤러로 보내서 로그아웃
+					return;
+				}
+			}
 		}
 		chain.doFilter(request, response);
 	}
 
-	/**
-	 * @see Filter#init(FilterConfig)
-	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
 	}
 
 }

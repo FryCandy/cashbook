@@ -1,6 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +37,39 @@ public class HostPageController extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//회원 강제 로그 아웃 기능
+		String sessionId = null;
+		String session = null;
+		if(request.getParameter("sessionId")!=null) {
+			sessionId = request.getParameter("sessionId");
+			System.out.println(sessionId +"<--sessionId /host/HostPageController.dopost");
+		}
+		List<Map<String,Object>> loginList = (List<Map<String,Object>>)request.getServletContext().getAttribute("loginList"); //기존의 loginList 호출
+		for(Map m : loginList) {//loginList에서 강제 로그아웃할 회원의 session 불러오기
+			if(sessionId.equals(m.get("sessionId"))){
+				session = String.valueOf(m.get("session"));
+				System.out.println(session +"<--session /host/HostPageController.dopost");
+			}
+		}
+		//overlapList에 session,sessionId를 넣어 강제 로그아웃 시키는 기능
+		if((List<Map<String,Object>>)request.getServletContext().getAttribute("overlapList") == null) { //application의 overlapList가 null이라면
+			List<Map<String,Object>> overlapList = new ArrayList<>(); //새로운 overlapList를 만들어서
+			Map<String,Object> map = new HashMap<>();
+			map.put("sessionId", sessionId);
+			map.put("session",session);
+			overlapList.add(map); //overlapList에 sessionId와 session을 추가 한후
+			request.getServletContext().setAttribute("overlapList", overlapList);//overlapList을  application 공간에 저장
+		} else { //application 내에 overlapList가 존재하면
+			List<Map<String,Object>> overlapList = (List<Map<String,Object>>)request.getServletContext().getAttribute("overlapList"); //기존의 overlapList를 호출
+			Map<String,Object> map = new HashMap<>();
+			map.put("sessionId", sessionId);
+			map.put("session",session);
+			overlapList.add(map); //overlapList에 sessionId와 session을 추가 한후
+			request.getServletContext().setAttribute("overlapList", overlapList);//overlapList을 다시 application 공간에 저장
+		}
+		//완료후 HostPageController로 redirect
+		response.sendRedirect(request.getContextPath()+"/host/HostPageController");
+		
 		
 	}
-
 }
