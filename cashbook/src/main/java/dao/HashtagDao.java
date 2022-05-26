@@ -1,6 +1,5 @@
 package dao;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import util.DBUtil;
 public class HashtagDao {
 	//전체 데이터에서 태그 순위 요청 메서드
 	public List<Map<String,Object>> selectTagRankList(){
@@ -18,8 +19,7 @@ public class HashtagDao {
 		ResultSet rs = null;
 		//DB에 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			//전체 데이터에서 태그 순위 정하는 쿼리 작성
 			String sql = "SELECT t.tag"
 					+ "					,t.cnt \"count\""
@@ -59,8 +59,7 @@ public class HashtagDao {
 		ResultSet rs = null;
 		//DB에 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			//쿼리 작성
 			String sql = "SELECT t.tag"
 					+ "					,t.cnt \"count\""

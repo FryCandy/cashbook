@@ -1,11 +1,11 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import util.DBUtil;
 import vo.Stats;
 
 public class StatsDao {
@@ -16,7 +16,7 @@ public class StatsDao {
 		PreparedStatement stmt = null;
 		String sql ="INSERT INTO stats(day,cnt) VALUES(CURDATE(),1)";
 		try {
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.executeUpdate();
 			
@@ -41,7 +41,7 @@ public class StatsDao {
 		ResultSet rs = null;
 		String sql = "SELECT day,cnt FROM stats WHERE day = CURDATE()";
 		try {
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if(rs.next()) {
@@ -69,7 +69,7 @@ public class StatsDao {
 		PreparedStatement stmt = null;
 		String sql ="UPDATE stats SET cnt = cnt+1 WHERE day = CURDATE() ";
 		try {
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.executeUpdate();
 			
@@ -81,7 +81,6 @@ public class StatsDao {
 				stmt.close();
 				conn.close();
 			}catch(SQLException e) {
-			e.printStackTrace();
 			}
 		}
 	}
@@ -94,7 +93,7 @@ public class StatsDao {
 		ResultSet rs = null;
 		String sql="SELECT SUM(cnt) cnt FROM stats";
 		try {
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if(rs.next()) {

@@ -1,13 +1,13 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.DBUtil;
 import vo.Member;
 public class MemberDao {
 	
@@ -29,8 +29,7 @@ public class MemberDao {
 				+ "		WHERE member_id=? ";
 		//DB에 값 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			rs =stmt.executeQuery();
@@ -71,8 +70,7 @@ public class MemberDao {
 				+ "		AND member_pw=PASSWORD(?)";
 		//DB에 값 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, member.getMemberId());
 			stmt.setString(2, member.getMemberPw());
@@ -116,8 +114,7 @@ public class MemberDao {
 				+ "			VALUES (?,PASSWORD(?),?,?,?,1,NOW(),NOW()) ";
 		//DB에 값 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, member.getMemberId());
 			stmt.setString(2, member.getMemberPw());
@@ -160,8 +157,7 @@ public class MemberDao {
 				+ "			AND member_pw =PASSWORD(?)";
 		//DB에 값 요청
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, member.getName());
 			stmt.setString(2, member.getGender());
@@ -203,8 +199,7 @@ public class MemberDao {
 		//3.member 테이블 데이터 삭제
 		String deleteMemberSql = "DELETE FROM member WHERE member_id=? AND member_pw=PASSWORD(?)";
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/cashbook","root","java1234");
+			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false); // 자동 커밋 해제
 			//0. select cashbook_no
 			stmt = conn.prepareStatement(selectCashBookNoSql);

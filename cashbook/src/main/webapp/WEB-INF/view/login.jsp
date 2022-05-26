@@ -19,6 +19,16 @@
 %>
 	<h1>Login Form</h1>
 	<h2><%=msg%></h2>
+	<!-- 입력없이 guest로 로그인 -->
+	<div>
+		<form action="<%=request.getContextPath()%>/LoginController" method ="post">
+			<input type = "text" name = "memberId" value="geust" readonly="readonly">
+			<input type = "password" name = "memberPw" value="1234" readonly="readonly">
+			<button type = "submit" class="btn btn-success">바로 로그인</button>
+		</form>
+	</div>
+	<br>
+	<!-- 기존 로그인 기능 -->
 	<form action="<%=request.getContextPath()%>/LoginController" method ="post">
 	<table class="table table-bordered">
 		<tr>
