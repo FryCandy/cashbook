@@ -12,14 +12,20 @@ import javax.servlet.http.HttpSession;
 import dao.MemberDao;
 import vo.Member;
 
-@WebServlet("/InsertMemberController")
+@WebServlet("/insertMemberController")
 public class InsertMemberController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();
 		if(session.getAttribute("sessionLoginMember") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
+			response.sendRedirect(request.getContextPath()+"/cashBookListByMonthController");
 			return;
+		}
+		//아이디 중복 체크
+		if(request.getParameter("checkId")!=null) {
+			String checkId = request.getParameter("checkId");
+			System.out.println(checkId+" insertMemberController.doget");
+			
 		}
 		//insertMemberForm.jsp 호출
 		request.getRequestDispatcher("/WEB-INF/view/insertMemberForm.jsp").forward(request, response);
@@ -31,13 +37,13 @@ public class InsertMemberController extends HttpServlet {
 		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();
 		if(session.getAttribute("sessionLoginMember") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
+			response.sendRedirect(request.getContextPath()+"/cashBookListByMonthController");
 			return;
 		}
 	    //널 체크
 	    if(request.getParameter("name")==null||request.getParameter("age")==null||request.getParameter("memberId")==null||request.getParameter("gender")==null) {
 	    	System.out.println("null insertMembercontroller.dopost");
-	    	response.sendRedirect(request.getContextPath()+"/UpdateMemberController?msg=null");//요청값에 null있으면 UpdateMemberController로 돌려보냄
+	    	response.sendRedirect(request.getContextPath()+"/updateMemberController?msg=null");//요청값에 null있으면 UpdateMemberController로 돌려보냄
 	    	return;
 	    }
 	    //요청값 처리
@@ -47,7 +53,7 @@ public class InsertMemberController extends HttpServlet {
 	     memberPw = request.getParameter("memberPw1");
 	    }else if(request.getParameter("memberPw1")!=null&&request.getParameter("memberPw2")!=null&&!request.getParameter("memberPw1").equals("")&&!request.getParameter("memberPw1").equals(request.getParameter("memberPw2"))){
 	    	// null, 빈칸은 아니지만 비밀번호가 둘이 일치하지 않는다면 msg와 함께 돌려보냄
-	    	response.sendRedirect(request.getContextPath()+"/InsertMemberController?msg=notMatch");
+	    	response.sendRedirect(request.getContextPath()+"/insertMemberController?msg=notMatch&memberId="+request.getParameter("memberId"));
 	    	return;
 	    }
 	    Member member = new Member();
@@ -62,16 +68,16 @@ public class InsertMemberController extends HttpServlet {
 	    MemberDao memberDao = new MemberDao();
 	    int row = memberDao.insertMember(member);
 	    if (row==1) { //성공시 Logincontroller으로 돌려보냄
-	    	System.out.println("가입성공 InsertMemberController.dopist");
-	    	response.sendRedirect(request.getContextPath()+"/LoginController");
+	    	System.out.println("가입성공 insertMemberController.dopist");
+	    	response.sendRedirect(request.getContextPath()+"/loginController");
 	    	return;
 	    }else if(row==0) {// row==0이면 영향받은 행이 없으므로 (row 기본값 -1), 가입실패
 	    	System.out.println("가입실패 insertMemberController.dopist");
-	    	response.sendRedirect(request.getContextPath()+"/InsertMemberController?msg=fail");
+	    	response.sendRedirect(request.getContextPath()+"/insertMemberController?msg=fail");
 	    	
 	    }else if (row==-1) {//row가 -1이면 sql이 작동 안함
 	    	System.out.println("예외 발생 insertMemberController.dopist");
-	    	response.sendRedirect(request.getContextPath()+"/InsertMemberController?msg=exception");
+	    	response.sendRedirect(request.getContextPath()+"/insertMemberController?msg=exception");
 	    }
 	    
 	    

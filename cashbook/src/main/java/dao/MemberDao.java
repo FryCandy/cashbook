@@ -254,6 +254,40 @@ public class MemberDao {
 		}
 		return row;
 	}
+	//아이디 중복 체크 아이디
+	public int checkMemberId(String checkId) {
+		int row = -1; // 반환할 결과 행의 수 초기화 -1, 중복x = 0, 중복있음 = 1
+		//DB 자원 준비
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		//쿼리 작성
+		String checkMemberIdSql = "SELECT * FROM member WHERE member_id=?";
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false); // 자동 커밋 해제
+			//0. select cashbook_no
+			stmt = conn.prepareStatement(checkMemberIdSql);
+			stmt.setString(1, checkId);
+			row = stmt.executeUpdate(); // 결과 행의수 row에 저장
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+				
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally {
+			try {
+				//DB자원 반납
+				stmt.close();
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
 	
 	
 }

@@ -16,17 +16,32 @@ import javax.servlet.http.HttpSession;
 import dao.MemberDao;
 import vo.Member;
 
-@WebServlet("/LoginController")
+@WebServlet("/all/loginController")
 public class LoginController extends HttpServlet {
+	//Dao
+	private MemberDao memberDao;
     //로그인 폼   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();
 		if(session.getAttribute("sessionLoginMember") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
+			response.sendRedirect(request.getContextPath()+"/cashBookListByMonthController");
 			return;
 		}
-		//로그인이 되어 있지 않은 상태면 forward
+		//오류 메세지 수령
+		String msg ="";
+		if(request.getParameter("msg")!=null) {
+			msg = request.getParameter("msg");
+			System.out.println("[loginController.doget] msg :"+msg);
+			if(msg.equals("failLogin")) { //loginController.dopost에서 Dao요청 실패시 오류메세지
+				msg = "로그인 정보를 확인해주세요";
+			}else if(request.getParameter("msg").equals("noLogin")) {
+				msg = "로그인 후 이용해주세요";
+			}else if(msg.equals("needAuth"))
+				msg = "이용이 정지된 회원입니다 고객센터에 문의해주세요";
+			request.setAttribute("msg", msg);
+		}
+		//로그인이 되어 있지 않은 상태면 login페이지 forward
 		request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
 	}
 	//로그인 액션
@@ -34,27 +49,27 @@ public class LoginController extends HttpServlet {
 		//로그인 되어 있는 멤버면 CashBookListByMonthController로 리다이렉트
 		HttpSession session = request.getSession();//현재 연결한 클라이언트(브라우저)에 대한 세션 값을 받아옴
 		if(session.getAttribute("sessionLoginMember") != null) {
-			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
+			response.sendRedirect(request.getContextPath()+"/cashBookListByMonthController");
 			return;
 		}
 		//요청값 처리
 		String memberId = request.getParameter("memberId");
-		System.out.println(memberId+"<-memberId LoginController.dopost");
+		System.out.println("[LoginController.dopost] memeber Id:"+memberId);
 		String memberPw = request.getParameter("memberPw");
-		System.out.println(memberPw+"<-memberPw LoginController.dopost");
+		System.out.println("[LoginController.dopost] memberPw :"+memberPw);
 		Member member = new Member();
 		member.setMemberId(memberId);
 		member.setMemberPw(memberPw);
 		
 		// 모델 호출
-		MemberDao memberDao = new MemberDao();
+		memberDao = new MemberDao();
 		Member loginMember = new Member();
 		loginMember = memberDao.selectMemberByIdPw(member); //DB에서 로그인 성공시 memberId와 level이 리턴
 		
 		//로그인 실패시 로그인 폼을 재요청
 		if(loginMember == null) {
 			System.out.println("failLogin");//디버깅
-			response.sendRedirect(request.getContextPath()+"/LoginController?msg=failLogin");
+			response.sendRedirect(request.getContextPath()+"/loginController?msg=failLogin");
 			return;
 		}
 		
@@ -62,8 +77,9 @@ public class LoginController extends HttpServlet {
 		session.setAttribute("sessionLoginMember",loginMember);
 		
 		//현재 로그인 member 보기 기능
-		if((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))==null||((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))).size()==0) { //loginList의 값이 null이라면
-			List<Map<String,Object>> list = new ArrayList<>(); //리스트에 아이디와, session 저장
+		 //application내에 loginList의 값이 null이라면 리스트를 새로 만들어서 map으로 아이디와, session을 묶어 저장 
+		if((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))==null||((List<Map<String,Object>>)(request.getServletContext().getAttribute("loginList"))).size()==0) {
+			List<Map<String,Object>> list = new ArrayList<>();
 			Map<String,Object> map = new HashMap<>();
 			map.put("sessionId", loginMember.getMemberId());
 			map.put("session",session);
@@ -102,9 +118,7 @@ public class LoginController extends HttpServlet {
 			request.getServletContext().setAttribute("loginList", loginList);//loginList을 다시 application 공간에 저장
 		}
 		//로그인 성공, CashBookListByMonthController로 redirect
-		response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
-		
-		
+		response.sendRedirect(request.getContextPath()+"/member/cashBookListByMonthController");
 	}
 
 }

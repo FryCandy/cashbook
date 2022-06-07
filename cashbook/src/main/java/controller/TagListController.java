@@ -26,6 +26,7 @@ public class TagListController extends HttpServlet {
 	        return;
 	      }
 		//널체크
+	    //-${String.format(`%02d`,month)}-${String.format(`%02d`,today)}
 		if(request.getParameter("todayDate")==null) {
 			System.out.println("null TagController.doGet");
 			response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");//널오류 발생시 CashBookListByMonthController로 돌려보냄

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
 import vo.Member;
-@WebServlet("/CashBookListByTagController")
+@WebServlet("/cashBookListByTagController")
 public class CashBookListByTagController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	//인코딩
@@ -23,12 +23,12 @@ public class CashBookListByTagController extends HttpServlet {
     Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
     //로그인이 안되어있을 경우 LoginController로 보냄
     if(sessionLoginMember == null) {
-        response.sendRedirect(request.getContextPath()+"/LoginController");
+        response.sendRedirect(request.getContextPath()+"/loginController");
         return;
       }
 	if(request.getParameter("tag")==null){//널값이 들어오면 CashBookListByMonthController로 돌려보냄
 		System.out.println("null CashBookListByTagController.doGet");//디버깅
-		response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController");
+		response.sendRedirect(request.getContextPath()+"/cashBookListByMonthController");
 		return;
 	}
 	//요청값 받기

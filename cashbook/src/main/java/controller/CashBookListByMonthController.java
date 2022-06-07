@@ -13,30 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.CashBookDao;
-import dao.StatsDao;
 import vo.Member;
-import vo.Stats;
-@WebServlet("/CashBookListByMonthController")
+@WebServlet("/member/cashBookListByMonthController")
 public class CashBookListByMonthController extends HttpServlet {
-	private StatsDao statsDao;
+	private CashBookDao cashBookDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.statsDao = new StatsDao();
-		//날짜별 전체 접속자 수
-		Stats stats = statsDao.selectStatsOneByNow();
-		int totalCount = statsDao.selectStatsTotalCount();
-		request.setAttribute("stats", stats);
-		request.setAttribute("totalCount", totalCount);
-		
-		
-		//session 값 요청
+		//사용할 dao 호출
+		this.cashBookDao = new CashBookDao();
+		//session에 로그인 정보 요청
 		HttpSession session = request.getSession();
 	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
-	    //로그인이 안되어있을 경우 LoginController로 보냄
-	    if(sessionLoginMember == null) {
-	        response.sendRedirect(request.getContextPath()+"/LoginController");
-	        System.out.println("noLogin");//디버깅
-	        return;
-	      }
 		//1) 월별 가계부 리스트 요청 처리 분석
 		//요청값이 없을 경우 오늘 날짜가 기준
 		Calendar now = Calendar.getInstance();
@@ -56,11 +42,11 @@ public class CashBookListByMonthController extends HttpServlet {
 				month = 1;
 				year= year+1;
 			}
-			System.out.println(year +"<-year CashBookListByMonthController");
-			System.out.println(month +"<-month CashBookListByMonthController");
+			System.out.println("[CashBookListByMonthController.doget] year :"+year);
+			System.out.println("[CashBookListByMonthController.doget] month :"+month);
 			// 오늘 날짜
 			int today = now.get(Calendar.DATE);
-			System.out.println(today+"<-today CashBookListByMonthController");
+			System.out.println("[CashBookListByMonthController.doget] today :"+today);
 
 		//아래의 코드는 모델로 가는게 좋을수도있다.
 		//캘린더api 모델을 불러온 컨트롤러로 볼수있다
@@ -86,7 +72,6 @@ public class CashBookListByMonthController extends HttpServlet {
 		System.out.println(totalTd+"<-totalTd CashBookListByMonthController");//디버깅
 		
 		//2)모델값(월별 가계부 리스트)을 반환하는 비지니스 로직(모델) 호출
-		CashBookDao cashBookDao = new CashBookDao();
 		List<Map<String,Object>> cashBookList = cashBookDao.selectcashBookListbyMonth(year, month,sessionLoginMember.getMemberId());
 		/*
 		 달력출력에 필요한 모델값(데이터베이스에서 반환된 모델 값)

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.MemberDao;
 import vo.Member;
-@WebServlet("/SelectMemberOneController")
+@WebServlet("/selectMemberOneController")
 public class SelectMemberOneController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//session 값 요청
@@ -19,7 +19,7 @@ public class SelectMemberOneController extends HttpServlet {
 	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
 	    if(sessionLoginMember == null) {
-	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        response.sendRedirect(request.getContextPath()+"/loginController");
 	        System.out.println("notLogin");
 	        return;
 	    }

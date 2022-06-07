@@ -13,7 +13,7 @@
         <div class="details">
             <h3>404 - 잘못된 요청입니다.</h3>
             <p>
-                <a href="${pageContext.request.contextPath}/CashBookListByMonthController" > 가계부페이지로 이동 </a>   
+                <a href="${pageContext.request.contextPath}/member/homeController" > 홈으로 이동 </a>   
             </p>
         </div>
     </div>

@@ -8,15 +8,15 @@
 </head>
 <body class ="container">
 	<h1>insertCashBook</h1>
-	<form method ="post" action="<%=request.getContextPath()%>/InsertCashBookController">
+	<form method ="post" action="${pageContext.request.contextPath}/member/insertCashBookController">
 		<!-- 연도와 달력값 보내기 -->
-		<input type ="hidden" name="year" value="<%=request.getParameter("year")%>">
-		<input type ="hidden" name="month" value="<%=request.getParameter("month")%>">
+		<input type ="hidden" name="year" value="${year}">
+		<input type ="hidden" name="month" value="${month}">
 		<table class="table table-bordered">
 			<tr>
 				<td>cashDate</td>
 				<td>
-					<input type = "text" readonly="readonly" value ="<%=(String)request.getAttribute("cashDate")%>" name ="cashDate" >
+					<input type = "text" readonly="readonly" value ="${cashDate}" name ="cashDate" >
 				</td>
 			</tr>
 			<tr>
@@ -44,7 +44,7 @@
 				</td>
 			</tr>
 		</table>
-		<a  href="<%=request.getContextPath()%>/CashBookListByMonthController" type ="button" class="btn btn-secondary">리스트</a>
+		<a  href="${pageContext.request.contextPath}/member/cashBookListByMonthController" type ="button" class="btn btn-secondary">리스트</a>
 	</form>
 </body>
 </html>

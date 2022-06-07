@@ -15,7 +15,7 @@ import dao.CashBookDao;
 import vo.CashBook;
 import vo.Member;
 
-@WebServlet("/InsertCashBookController")
+@WebServlet("/member/insertCashBookController")
 public class InsertCashBookController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,15 +24,20 @@ public class InsertCashBookController extends HttpServlet {
 	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
 	    if(sessionLoginMember == null) {
-	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        response.sendRedirect(request.getContextPath()+"/all/loginController");
 	        return;
 	      }
+	    //유효성 검사
+	    if(request.getParameter("year")==null||request.getParameter("month")==null||request.getParameter("day")==null) {
+	    	//날짜에 null이 들어오면 월별가계부페이지로 리다이렉트
+	    	response.sendRedirect(request.getContextPath()+"/member/cashBookListByMonthController");
+	    }
 		//request 분석
 		String year = request.getParameter("year");
 		String month = request.getParameter("month");
 		String day = request.getParameter("day");
 		String cashDate = year+"-"+month+"-"+day;
-		System.out.println(cashDate +"<-cashDate InsertCashBookController"); //디버깅
+		System.out.println("[InsertCashBookController] castDate :"+cashDate); //디버깅
 		request.setAttribute("cashDate", cashDate);
 		request.getRequestDispatcher("/WEB-INF/view/insertCashBookForm.jsp").forward(request, response);// get 방식은 InsertCashBook.jsp페이지를 서비스 =C-V방식
 	}
@@ -43,7 +48,7 @@ public class InsertCashBookController extends HttpServlet {
 	    Member sessionLoginMember = (Member)session.getAttribute("sessionLoginMember");
 	    //로그인이 안되어있을 경우 LoginController로 보냄
 	    if(sessionLoginMember == null) {
-	        response.sendRedirect(request.getContextPath()+"/LoginController");
+	        response.sendRedirect(request.getContextPath()+"/all/loginController");
 	        return;
 	      }
 
@@ -88,7 +93,7 @@ public class InsertCashBookController extends HttpServlet {
 		CashBookDao cashBookDao = new CashBookDao();
 		cashBookDao.insertCashBook(cashBook,hashtag);
 		//완료후 CashBookListByMonthController
-		response.sendRedirect(request.getContextPath()+"/CashBookListByMonthController?year="+year+"&month="+month);
+		response.sendRedirect(request.getContextPath()+"/member/cashBookListByMonthController?year="+year+"&month="+month);
 //		System.out.println(hashtagRow);
 //		if (hashtagRow == hashtag.size()) { // 해쉬태그 테이블에 태그 수많큼 입력이 성공하면 listcontroller로 돌려보냄
 //		}else {//다르다면 실패, InsertCashBookForm.jsp 로 넘어감
